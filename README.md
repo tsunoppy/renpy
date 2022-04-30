@@ -18,6 +18,19 @@
 | make_report | under develop                                              |
 | read_calc   | read CALC table, generate mn curve figure, make pdf report |
 
+### Use example
+
+``` python
+input_path = "./test/data.xlsx"
+obj = MnGen(input_path) # make object
+obj.read_cntl()         # read cntl table data
+obj.read_column()       # read column table data
+obj.solve()             # solve and save mn curve data
+obj.read_calc()         # read calc table data & make pdf data
+## or
+# obj.solve_deep()      # solve and save datasets for the DL
+```
+
 ### __init__(input_path)
 
 | variable | Description                         |
@@ -59,18 +72,6 @@
 |:---------|-----------------------------------|
 | obj      | column object using column module |
 
-### use example
-
-``` python
-input_path = "./test/data.xlsx"
-obj = MnGen(input_path) # make object
-obj.read_cntl()         # read cntl table data
-obj.read_column()       # read column table data
-obj.solve()             # solve and save mn curve data
-obj.read_calc()         # read calc table data & make pdf data
-## or
-# obj.solve_deep()      # solve and save datasets for the DL
-```
 
 ## 1. How to use
 
