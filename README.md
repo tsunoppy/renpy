@@ -2,23 +2,54 @@
 - Reinforced concrete capacity package
 - Genrate MN-diagram for reinforced concrete columns
 
+---
+
+# Table of content
+
+- [1. MnGen.py](#1-mngenpy)
+  - [1.1 Use example](#11-use-example)
+  - [1.2 __init__](#12-init)
+  - [1.3 read_cntl()](#13-read_cntl)
+  - [1.4 read_column()](#14-read_column)
+  - [1.5 solve()](#15-solve)
+  - [1.6 input excel data](#16-input-excel-data)
+- [2. col.py](#2-colpy)
+  - [2.1 Use example](#21-use-example)
+
+---
+
+# Souse Code
+
+* mnGen.py
+* aijRc.py
+* col.py
+* main.py
+* rand.py
+* rc.py
+* report.py
+* tmp.py
+
+
 ## 1. MnGen.py
+
+![Image](./images/mnGen.png)
+
 
 | class | Description        |
 |:------|--------------------|
 | MnGen | Mn Curve Generator |
 
-| method      | Description                                                |
-|:------------|------------------------------------------------------------|
-| __init__    | initialize of variable                                     |
-| read_cntl   | read CNTL table in excel data & make variable              |
-| read_column | read COLUMN table in excel data & make variable            |
-| solve       | solve mn capacity, save result data using column module    |
-| solve_deep  | make mn capacity for the deep learning, and make datasets  |
-| make_report | under develop                                              |
-| read_calc   | read CALC table, generate mn curve figure, make pdf report |
+| method      | Description                                                | Use Module        |
+|:------------|------------------------------------------------------------|-------------------|
+| __init__    | initialize of variable                                     |                   |
+| read_cntl   | read CNTL table in excel data & make variable              |                   |
+| read_column | read COLUMN table in excel data & make variable            |                   |
+| solve       | solve mn capacity, save result data using column module    | col.py            |
+| solve_deep  | make mn capacity for the deep learning, and make datasets  | col.py            |
+| make_report | under develop m(_ _)m                                      | report.py         |
+| read_calc   | read CALC table, generate mn curve figure, make pdf report | col.py, report.py |
 
-### Use example
+### 1.1 Use example
 
 ``` python
 input_path = "./test/data.xlsx"
@@ -31,28 +62,29 @@ obj.read_calc()         # read calc table data & make pdf data
 # obj.solve_deep()      # solve and save datasets for the DL
 ```
 
-### __init__(input_path)
+### 1.2 init
+__init__(input_path)
 
 | variable | Description                         |
 |:---------|-------------------------------------|
 | inp_path | path to the input data (Excel data) |
 | home_dir | directly to the inp_path            |
 
-### read_cntl()
+### 1.3 read_cntl()
 
-| variable     | Description                              |
-|:-------------|------------------------------------------|
-| out_path     | output data path                         |
-| view_path    | directly path to the inp_path            |
-| report_path  | directly path to the pdf output file     |
-| report_title | title in output report                   |
-|:-------------|------------------------------------------|
-| ndiv         | incremental of the neutral axis          |
-| mdmax        | maximum bending moment in mn curve graph |
-| ndmin        | minimum axial force in mn curve graph    |
-| ndmax        | maximum axial force in mn curve graph    |
+| variable     | Description                              | Remark       |
+|:-------------|------------------------------------------|--------------|
+| out_path     | output data path                         |              |
+| view_path    | directly path to the inp_path            |              |
+| report_path  | directly path to the pdf output file     |              |
+| report_title | title in output report                   |              |
+|              |                                          |              |
+| ndiv         | incremental of the neutral axis          | 0.05d - 2.0d |
+| mdmax        | maximum bending moment in mn curve graph |              |
+| ndmin        | minimum axial force in mn curve graph    |              |
+| ndmax        | maximum axial force in mn curve graph    |              |
 
-### read_column()
+### 1.4 read_column()
 
 | varibale      | Description                   |
 |:--------------|-------------------------------|
@@ -66,30 +98,62 @@ obj.read_calc()         # read calc table data & make pdf data
 | nx,ny,dtx,dty | see input data specification  |
 | name          | story column symbol           |
 
-### solve()
+### 1.5 solve()
 
 | varibale | Description                       |
 |:---------|-----------------------------------|
 | obj      | column object using column module |
 
+### 1.6 Input Excel Data
 
-## 1. How to use
+Excel data format
+
+
+---
+
+## 2. col.py
+
+### 2.1 How to use
 
 ``` python
->import column
+>import col
 ```
 | class  | Description                        |
 |:-------|------------------------------------|
-| Cap    | Calculation of the column capacity |
+| col    | Calculation of the column capacity |
 | Aft_mn | plot mn-curve graph                |
-| Report | Making pdf report                  |
 
 
-## 1-1. column.Cap()
+### 2.2 col.col()
 
 ``` python
->obj = column.Cap(fc,fy,b,dd,nx,ny,dtx,dty,dia)
+>obj = col.col(fc,fy,b,dd,nx,ny,dtx,dty,dia)
 ```
+
+| method                                            | Description                                      |
+|:--------------------------------------------------|--------------------------------------------------|
+| init(fc,fy,b,dd,nx,ny,dtx,dty,dia                 | initialize of variable                           |
+| feature()                                         | get sIx, sIy, sZx, sZy, Ag                       |
+| bar_pos(nx,ny,dtx,dty)                            | set steel bar position                           |
+| narc(b,dd,xn,fc,ft,pos,area)                      | xn/neutral axis -> Na/Permissible axial force    |
+| marc(b,dd,xn,fc,ft,pos,area,nn)                   | xn/neutral axis -> Ma/Permissible bending moment |
+| mnarc(b,dd,fc,ft,pos,aw,nn)                       | nn/axial force -> Ma/Permissible bending moment  |
+| ma(direction,fc,ft,nn)                            | nn/axial force & direction(X or Y) -> Ma         |
+| mnaGen(direction,fc,ft,div)                       | direction(X or Y) -> generate mn data            |
+| nca_c()                                           | permissible compressive axial force strength     |
+| nu_t()                                            | permissible tension axial force strength         |
+| mnuaci(direction,nd)                              |                                                  |
+| mnuaci_twoM(direction,nd)                         |                                                  |
+| mn_result_xlsx(div,path,sheet_name,wb)            |                                                  |
+| make_model_fig(name)                              |                                                  |
+| make_fig(input_file,name)                         |                                                  |
+| aft_mn(direction,div,path)                        |                                                  |
+| mnuGen(direction,div)                             |                                                  |
+| sig2(ee,sigy,e)                                   | e/strain -> stress of the steel bar              |
+| nuaci(xn,fc,eu,k1,k2,k3,ee,sigy,b,dd,pos,area)    |                                                  |
+| muaci(xn,fc,eu,k1,k2,k3,ee,sigy,b,dd,pos,area,nn) |                                                  |
+
+
 
 | Parameters | Description                                   | unit  |       |
 |:-----------|-----------------------------------------------|-------|-------|
@@ -100,10 +164,10 @@ obj.read_calc()         # read calc table data & make pdf data
 | nx,ny      | number of steel bar                           | Nos   | int   |
 | dtx,dty    | position of the steel bar from column surface | mm    | float |
 
-### 1-1-1. column.Cap().mn_result_xlsx()
+### 2.3 col.Aft_mn()
 
 ``` python
->obj.mn_result_xlsx(div,path,sheet_name)
+>obj = col.Aft_mn(div,path,sheet_name)
 ```
 | Parameters | Description                  | unit |
 |:-----------|------------------------------|------|
@@ -111,11 +175,13 @@ obj.read_calc()         # read calc table data & make pdf data
 | path       | path to the output xlsx data | str  |
 | sheet_name | column name                  | str  |
 
+### 2.3 col.Report()
+
+
 
 
 ## Attribute
 
-## Input data
 
 ### CNTL
 ### COLUMN
