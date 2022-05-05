@@ -28,3 +28,12 @@ Total params: 14,265
 Trainable params: 14,265
 Non-trainable params: 0
 ```
+
+## Result
+
+![Image](./images/mn.png)
+
+![Image](./images/stan.png)
+
+
+
