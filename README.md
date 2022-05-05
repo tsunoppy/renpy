@@ -15,6 +15,7 @@
   - [1.6 input excel data](#16-input-excel-data)
 - [2. col.py](#2-colpy)
   - [2.1 Use example](#21-use-example)
+- [3. deep learning](#3-deep-learning)
 
 ---
 
