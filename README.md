@@ -1,11 +1,17 @@
+
 # renpy
+
 - Reinforced concrete capacity package
+- based on ACI Code.
 - Genrate MN-diagram for reinforced concrete columns
+  - Deep Learnin Test
+- Calculate bending moment capacity for the column
 
 ---
 
 # Table of content
 
+- [Souse Code](#souse-code)
 - [1. MnGen.py](#1-mngenpy)
   - [1.1 Use example](#11-use-example)
   - [1.2 __init__](#12-init)
@@ -21,15 +27,12 @@
 
 # Souse Code
 
-* mnGen.py
-* aijRc.py
-* col.py
-* main.py
-* rand.py
-* rc.py
-* report.py
-* tmp.py
-
+| script    | Description                 | import           |
+|:----------|-----------------------------|------------------|
+| mnGen.py  | Mn-Diagram generator        | col.py,report.py |
+| col.py    | column capacity calculation | rc.py            |
+| rc.py     | -                           | -                |
+| report.py | make pdf report             | -                |
 
 ## 1. MnGen.py
 
@@ -107,8 +110,38 @@ __init__(input_path)
 
 ### 1.6 Input Excel Data
 
-Excel data format
+pls, check the input/data.xlsx
 
+#### CNTL
+| output        | ndiv       | mdmax | ndmin  | ndmax |
+|:--------------|------------|-------|--------|-------|
+| ./result.xlsx | 10         | 8000  | -25000 | 80000 |
+| ./images      |            |       |        |       |
+| ./sample.pdf  | Pj. Sample |       |        |       |
+
+
+#### COLUMN
+| variable   | description                     | unit  |
+|:-----------|---------------------------------|-------|
+| st         | story.                          | -     |
+| sym.       | column symbol                   | -     |
+| fc         | compressive concrete strength   | N/mm2 |
+| fy         | yield strength of the steel bar | N/mm2 |
+| b,d        | column dimension                | mm    |
+| dia        | dia. of the steel bar           | mm    |
+| nx1,ny1,.. | num of the main bar             | nos   |
+| dtx,dty,.. | distance from the column face   | mm    |
+
+#### CALC
+| variable              | description                 | unit |
+|:----------------------|-----------------------------|------|
+| st                    | story. num                  | -    |
+| sym.                  | column symbol               | -    |
+| xnum                  | load num. in X-dir.         | int  |
+| ynum                  | load num. in Y-dir          | int  |
+| load_x1, load_y1, ... | title                       | str  |
+| N_x1, N_y1, ..        | axial load in x, y dir.     | kN   |
+| M_x1, M_y1, ..        | bending moment in x, y dir. | kN.m |
 
 ---
 
