@@ -1,6 +1,6 @@
 # DL for MN
-- Reinforced concrete capacity package
-- Genrate MN-diagram for reinforced concrete columns
+- Deep Learning based on the mn-diagram
+- use feature as Zx, Zy, Ag
 
 ## scripts
 
