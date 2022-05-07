@@ -34,7 +34,7 @@
 | rc.py     | -                           | -                |
 | report.py | make pdf report             | -                |
 
-## 1. MnGen.py
+# 1. MnGen.py
 
 ![Image](./images/mnGen.png)
 
@@ -53,7 +53,7 @@
 | make_report | under develop m(_ _)m                                      | report.py         |
 | read_calc   | read CALC table, generate mn curve figure, make pdf report | col.py, report.py |
 
-### 1.1 Use example
+## 1.1 Use example
 
 ``` python
 input_path = "./test/data.xlsx"
@@ -66,7 +66,7 @@ obj.read_calc()         # read calc table data & make pdf data
 # obj.solve_deep()      # solve and save datasets for the DL
 ```
 
-### 1.2 init
+## 1.2 init
 __init__(input_path)
 
 | variable | Description                         |
@@ -74,7 +74,7 @@ __init__(input_path)
 | inp_path | path to the input data (Excel data) |
 | home_dir | directly to the inp_path            |
 
-### 1.3 read_cntl()
+## 1.3 read_cntl()
 
 | variable     | Description                              | Remark       |
 |:-------------|------------------------------------------|--------------|
@@ -88,7 +88,7 @@ __init__(input_path)
 | ndmin        | minimum axial force in mn curve graph    |              |
 | ndmax        | maximum axial force in mn curve graph    |              |
 
-### 1.4 read_column()
+## 1.4 read_column()
 
 | varibale      | Description                   |
 |:--------------|-------------------------------|
@@ -102,17 +102,17 @@ __init__(input_path)
 | nx,ny,dtx,dty | see input data specification  |
 | name          | story column symbol           |
 
-### 1.5 solve()
+## 1.5 solve()
 
 | varibale | Description                       |
 |:---------|-----------------------------------|
 | obj      | column object using column module |
 
-### 1.6 Input Excel Data
+## 1.6 Input Excel Data
 
 pls, check the input/data.xlsx
 
-#### CNTL
+### CNTL
 | output        | ndiv       | mdmax | ndmin  | ndmax |
 |:--------------|------------|-------|--------|-------|
 | ./result.xlsx | 10         | 8000  | -25000 | 80000 |
@@ -120,7 +120,7 @@ pls, check the input/data.xlsx
 | ./sample.pdf  | Pj. Sample |       |        |       |
 
 
-#### COLUMN
+### COLUMN
 | variable   | description                     | unit  |
 |:-----------|---------------------------------|-------|
 | st         | story.                          | -     |
@@ -132,7 +132,7 @@ pls, check the input/data.xlsx
 | nx1,ny1,.. | num of the main bar             | nos   |
 | dtx,dty,.. | distance from the column face   | mm    |
 
-#### CALC
+### CALC
 | variable              | description                 | unit |
 |:----------------------|-----------------------------|------|
 | st                    | story. num                  | -    |
@@ -145,9 +145,9 @@ pls, check the input/data.xlsx
 
 ---
 
-## 2. col.py
+# 2. col.py
 
-### 2.1 How to use
+## 2.1 How to use
 
 ``` python
 >import col
@@ -158,7 +158,7 @@ pls, check the input/data.xlsx
 | Aft_mn | plot mn-curve graph                |
 
 
-### 2.2 col.col()
+## 2.2 col.col()
 
 ``` python
 >obj = col.col(fc,fy,b,dd,nx,ny,dtx,dty,dia)
@@ -187,8 +187,7 @@ pls, check the input/data.xlsx
 | nuaci(xn,fc,eu,k1,k2,k3,ee,sigy,b,dd,pos,area)    |                                                  |
 | muaci(xn,fc,eu,k1,k2,k3,ee,sigy,b,dd,pos,area,nn) |                                                  |
 
-
-
+### init()
 | Parameters | Description                                   | unit  |       |
 |:-----------|-----------------------------------------------|-------|-------|
 | fc         | compressive concrete strength                 | N/mm2 | float |
@@ -198,35 +197,41 @@ pls, check the input/data.xlsx
 | nx,ny      | number of steel bar                           | Nos   | int   |
 | dtx,dty    | position of the steel bar from column surface | mm    | float |
 
-### 2.3 col.Aft_mn()
+## 2.3 col.Aft_mn()
 
 ``` python
 >obj = col.Aft_mn(div,path,sheet_name)
 ```
-| Parameters | Description                  | unit |
-|:-----------|------------------------------|------|
-| div        | num. of calculation mn data  | int  |
-| path       | path to the output xlsx data | str  |
-| sheet_name | column name                  | str  |
 
-### 2.3 col.Report()
+| method   | Description                  | variable  |
+|:---------|------------------------------|-----------|
+| init     |                              | see below |
+| spec     | return input data from excel |           |
+| make_fig | make mn-diaglam png data     | see below |
+
+### init
+| variable   | Description                  | unit           |
+|:-----------|------------------------------|----------------|
+| input_file | path to the excel input data | -              |
+| name       |                              | str            |
+| direction  | direction                    | "X", "Y", "XY" |
+| mdmax      | max. bending moment          | kN.m           |
+| ndmin      | min. axial force             | kN             |
+| ndmax      | max. axial force             | kN             |
+
+### make_fig
+| variable      | Description | unit      |
+|:--------------|-------------|-----------|
+| xtitle,ytitle | title       | str       |
+| xnum,nux,mux  | X-Dir.      | -,kN,kN.m |
+| ynmy,nuy,muy  | Y-Dir.      | -,kN,kN.m |
+
+---
+
+# 3. Deep Learning
+
+---
 
 
+# 4. beam.py
 
-
-## Attribute
-
-
-### CNTL
-### COLUMN
-| item | unit | remark        | example |
-|:-----|------|---------------|---------|
-| st   | -    | story.        | 1       |
-| sym  | -    | column symbol | c1      |
-|      |      |               |         |
-
-### CALC
-
-# beam.py
-# panel.py
-# aij.py
