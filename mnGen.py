@@ -233,8 +233,8 @@ class MnGen():
                             )
             self.obj[i].mn_result_xlsx(self.ndiv,self.out_path,self.name[i],wb)
 
-            print('mux=',self.obj[i].mnuaci_twoM("X",0.0))
-            print('muy=',self.obj[i].mnuaci_twoM("Y",0.0))
+            #print('mux=',self.obj[i].mnuaci_twoM("X",0.0))
+            #print('muy=',self.obj[i].mnuaci_twoM("Y",0.0))
 
             print("mn generate ---- No.",i,self.name[i])
 
