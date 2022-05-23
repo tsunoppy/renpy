@@ -360,6 +360,8 @@ class MnGen():
 
 if __name__ == '__main__':
     input_path = "./input_mngen/data.xlsx"
+    #input_path = "./input_mngen/before.xlsx"
+    #input_path = "./input_mngen/after.xlsx"
     #input_path = "./test/data.xlsx"
     obj = MnGen(input_path)
     obj.read_cntl()

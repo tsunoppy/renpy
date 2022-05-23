@@ -149,8 +149,10 @@ class col():
 
         # Concrete
         nac = 1 / 2 * b * csigc * xn
-        #if xn > dd:
-        #nac = 0.5 * b * csigc * dd
+        if xn > dd:
+            csigt = (xn-dd)/xn * csigc
+            #nac = 0.5 * b * csigc * dd
+            nac = 0.5 * ( csigc + csigt ) * b * dd
 
 
         # Steel Bar
@@ -192,9 +194,11 @@ class col():
                 ssigt = self.yn * csigc * (xn - d) / xn
 
         # Concete
-        #cmc = 1.0 / 6.0 * b * csigc * xn ** 2
         cmc = 1.0 / 6.0 * b * csigc * xn ** 2
-
+        if xn > dd:
+            csigt = (xn-dd)/xn * csigc
+            #print( csigc, csigt )
+            cmc = 1.0 / 6.0 * b * ( csigc - csigt ) * dd ** 2 + 1.0/2.0 * csigt * b * dd**2
 
         smt = 0.0
         for i in range(0,len(pos)):
@@ -260,7 +264,9 @@ class col():
         na = []
         ma = []
 
-        xnmax = 1.0 * min( self.b,self.dd )
+        #xnmax = 1.0 * min( self.b,self.dd )
+        #xnmax = 2.0 * min( self.b,self.dd )
+        xnmax = 2.0 * min( self.b,self.dd )
         xnmin = 0.001 *  min( self.b,self.dd )
         #xnmin = max(self.dtx,self.dty)+1.0
         delxn = (xnmax - xnmin ) / div
@@ -288,7 +294,7 @@ class col():
 
         for i in range(0,div):
 
-            xn = xnmin + delxn * i
+            xn = xnmin + i * delxn
             natmp = self.narc( b, dd, xn, fc, ft, pos_a, self.area)
             na.append( natmp )
             ma.append( self.marc( b, dd, xn, fc, ft, pos_a, self.area, natmp*1000.0) )
@@ -300,21 +306,15 @@ class col():
         na = np.array(na)
         ma = np.array(ma)
 
-        """
-        for i in range(0,len(na)):
-            print(na[i],ma[i])
-        """
         # plot
         ####################
-        plt.plot( ma,na, c='black', linewidth=0.5 ,marker=".",label='Allowable')
-        #plt.axes().set_xlim(0,)
-        """
-        nd = 0.0
-        plt.scatter(obj.ma("Y",fc,ft,nd),nd,marker="D")
-        """
+        if __name__ == '__main__':
+            plt.plot( ma,na, c='black', linewidth=0.5 ,marker=".",label='Allowable')
+            plt.grid()
+            plt.show()
 
-        plt.grid()
-        #plt.show()
+
+        return na,ma
 
     ########################################################################
     # 短期軸耐力
@@ -322,7 +322,12 @@ class col():
     # fc: コンクリート圧縮許容応力度 N/mm2
     # ft: 鉄筋圧縮許容応力度 N/mm2
         #nca_c = ( self.b * self.dd - self.ag) *  fc + self.ag * ft
-        nca_c = ( self.b * self.dd ) *  fc + self.ag * ft
+        sigc = fc
+        sigt = self.yn * sigc
+        if sigt > ft :
+            sigc = sigt/self.yn
+            sigt = ft
+        nca_c = ( self.b * self.dd -self.ag ) *  sigc + self.ag * sigt
         return nca_c
 
     def nca_t(self,ft):
@@ -518,6 +523,10 @@ class col():
         ####################
         nx, mx = self.mnuGen("X",div)
         ny, my = self.mnuGen("Y",div)
+        # Permissible Stress
+        nxa, mxa = self.mnaGen("X",self.fc*2.0/3.0,self.fy,div)
+        nya, mya = self.mnaGen("Y",self.fc*2.0/3.0,self.fy,div)
+        # fc,fyの設定が外部からアクセスできない
 
         #wb = openpyxl.Workbook(path)
         #wb = openpyxl.load_workbook(path)
@@ -525,15 +534,21 @@ class col():
         #ws1.title = sheet_name
         ws1 = wb.create_sheet(sheet_name)
 
-        header1 = ['spec', 'mx','nx','my','ny']
+        header1 = ['spec', 'mx','nx','my','ny','mxa','nxa','mya','nya']
         for i in range(len(header1)):
             ws1.cell(row = 1, column = i + 1).value = header1[i]
 
         for i in range(len(nx)):
+            # Ultimate
             ws1.cell(row= i+2, column = 2 ).value = mx[i]
             ws1.cell(row= i+2, column = 3 ).value = nx[i]
             ws1.cell(row= i+2, column = 4 ).value = my[i]
             ws1.cell(row= i+2, column = 5 ).value = ny[i]
+            # Permissible
+            ws1.cell(row= i+2, column = 6 ).value = mxa[i]
+            ws1.cell(row= i+2, column = 7 ).value = nxa[i]
+            ws1.cell(row= i+2, column = 8 ).value = mya[i]
+            ws1.cell(row= i+2, column = 9 ).value = nya[i]
 
         # output specification
         ws1.cell(row= 2, column = 1 ).value = self.b
@@ -1037,13 +1052,19 @@ class Aft_mn():
             ax.plot( self.df_mn['mx'],self.df_mn['nx'],\
                      'black' ,label='_nolegend_')
             """
+            # Ultimate
             ax.plot( self.df_mn['mx'],self.df_mn['nx'],\
                      'black' ,label='_nolegend')
+            # Permissible
+            ax.plot( self.df_mn['mxa'],self.df_mn['nxa'],\
+                     'black' ,label='_nolegend')
 
+            ################
             face = ["black","None"]
             if xnum != 0:
                 for i in range(0,xnum):
-                    ax.scatter( mux[i], nux[i], marker="o", s=8, facecolor=face[i], edgecolor='black', label=xtitle[i])
+                    ax.scatter( mux[i], nux[i], marker="o", s=8, \
+                                facecolor=face[i], edgecolor='black', label=xtitle[i])
 
             ax.legend('upper right')
             ax.legend(fontsize=8)
@@ -1077,8 +1098,15 @@ class Aft_mn():
             ax2.plot( self.df_mn['my'],self.df_mn['ny'],\
                       'black',label='_nolegend_')
             """
+            # Ultimate
             ax2.plot( self.df_mn['my'],self.df_mn['ny'],\
                       'black',label='_nolegend')
+            # Permissible
+            ax2.plot( self.df_mn['mya'],self.df_mn['nya'],\
+                     'black' ,label='_nolegend')
+
+            ################
+
 
             if ynum != 0:
                 for i in range(0,ynum):
@@ -1099,18 +1127,30 @@ class Aft_mn():
 
 if __name__ == '__main__':
 
+
+    """
     fc = 60
     fy = 490.0
     b = 1200.0
     dd = 950.0
-    #dd = 1500.0
-
     nx = [9,3]
     ny = [7,3]
     dtx = [100.0,475.0]
     dty = [100.0,350.0]
     dia = 41
+    """
 
+    #
+    fc = 30.
+    fy = 390.
+    b = 750.
+    dd = 750.
+    nx = [4]
+    ny = [6]
+    dtx = [100.0]
+    dty = [100.0]
+    dia = 29
+    
     nn = 950*950*60/3/1000
     nn = 0
 
@@ -1123,14 +1163,15 @@ if __name__ == '__main__':
     ftb = fy
     #print( obj.ma("Y",fcb,ftb,nn) )
     div = 30
-    #obj.mnaGen("X",fcb,ftb,div)
+    obj.mnaGen("X",fcb,ftb,div)
+
     #obj.mnuGen("X",div)
     #obj.mnuGen("Y",div)
     #obj.mnaGen("Y",fcb,ftb,div)
     #obj.mnuGen("Y",div)
 
     #print(obj.mnuaci("X",0.0))
-    obj.aft_mn("XY",div,'./test')
+    #obj.aft_mn("XY",div,'./test')
 
     """
     import report
