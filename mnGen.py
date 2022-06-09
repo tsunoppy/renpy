@@ -95,9 +95,23 @@ class MnGen():
         self.symb = df_col.iloc[:,1].values
         self.fc   = df_col.iloc[:,2].values
         self.fy   = df_col.iloc[:,3].values
-        self.b    = df_col.iloc[:,4].values
-        self.d    = df_col.iloc[:,5].values
-        self.dia  = df_col.iloc[:,6].astype(int).values
+
+        # additional for short term
+        self.lfc  = df_col.iloc[:,4].values
+        self.sfc  = df_col.iloc[:,5].values
+        self.lfy  = df_col.iloc[:,6].values
+        self.sfy  = df_col.iloc[:,7].values
+        self.alpha= df_col.iloc[:,8].values
+
+        # modified
+        #self.b    = df_col.iloc[:,4].values
+        #self.d    = df_col.iloc[:,5].values
+        #self.dia  = df_col.iloc[:,6].astype(int).values
+        #
+        self.b    = df_col.iloc[:,9].values
+        self.d    = df_col.iloc[:,10].values
+        self.dia  = df_col.iloc[:,11].astype(int).values
+
         #
         tmpnx = df_col[['nx1','nx2','nx3','nx4','nx5']]
         tmpny = df_col[['ny1','ny2','ny3','ny4','ny5']]
@@ -156,7 +170,9 @@ class MnGen():
                             col.col(\
                                self.fc[i],self.fy[i],self.b[i],self.d[i],\
                                     self.nx[i],self.ny[i],\
-                                    self.dtx[i],self.dty[i],self.dia[i])\
+                                    self.dtx[i],self.dty[i],self.dia[i],\
+                                    self.lfc[i],self.sfc[i],self.lfy[i],self.sfy[i],self.alpha[i]\
+                                    )\
                             )
             #self.obj[i].mn_result_xlsx(self.ndiv,self.out_path,self.name[i],wb)
             six,siy,szx,szy,ag =\
@@ -229,7 +245,9 @@ class MnGen():
                             col.col(\
                                self.fc[i],self.fy[i],self.b[i],self.d[i],\
                                     self.nx[i],self.ny[i],\
-                                    self.dtx[i],self.dty[i],self.dia[i])\
+                                    self.dtx[i],self.dty[i],self.dia[i],\
+                                    self.lfc[i],self.sfc[i],self.lfy[i],self.sfy[i],self.alpha[i]\
+                                    )\
                             )
             self.obj[i].mn_result_xlsx(self.ndiv,self.out_path,self.name[i],wb)
 
@@ -270,13 +288,26 @@ class MnGen():
 
         print(df_cal.head())
 
+
+        """
         calc_st  =  df_cal.iloc[:,0].values
         calc_sym =  df_cal.iloc[:,1].values
+        """
+
+        # change column
+        calc_ind =  df_cal.iloc[:,0].values
+        calc_st  =  df_cal.iloc[:,1].values
+        calc_sym =  df_cal.iloc[:,2].values
+
+
+        """
         calc_xnum = df_cal.iloc[:,2].values
         nend = 4+3*int(calc_xnum[0])
         print( df_cal.iloc[:,4:nend] )
         print( 'N=',df_cal['N_x1'].values )
         print( 'M=',df_cal['M_x1'].values )
+        """
+
 
         print("--------------------")
         print("CALC")
@@ -359,7 +390,8 @@ class MnGen():
 # end of class
 
 if __name__ == '__main__':
-    input_path = "./input_mngen/data.xlsx"
+    #input_path = "./input_mngen/data.xlsx"
+    input_path = "./input_mngen/data_new.xlsx"
     #input_path = "./input_mngen/before.xlsx"
     #input_path = "./input_mngen/after.xlsx"
     #input_path = "./test/data.xlsx"

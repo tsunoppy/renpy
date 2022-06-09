@@ -164,38 +164,42 @@ pls, check the input/data.xlsx
 >obj = col.col(fc,fy,b,dd,nx,ny,dtx,dty,dia)
 ```
 
-| method                                            | Description                                      |
-|:--------------------------------------------------|--------------------------------------------------|
-| init(fc,fy,b,dd,nx,ny,dtx,dty,dia                 | initialize of variable                           |
-| feature()                                         | get sIx, sIy, sZx, sZy, Ag                       |
-| bar_pos(nx,ny,dtx,dty)                            | set steel bar position                           |
-| narc(b,dd,xn,fc,ft,pos,area)                      | xn/neutral axis -> Na/Permissible axial force    |
-| marc(b,dd,xn,fc,ft,pos,area,nn)                   | xn/neutral axis -> Ma/Permissible bending moment |
-| mnarc(b,dd,fc,ft,pos,aw,nn)                       | nn/axial force -> Ma/Permissible bending moment  |
-| ma(direction,fc,ft,nn)                            | nn/axial force & direction(X or Y) -> Ma         |
-| mnaGen(direction,fc,ft,div)                       | direction(X or Y) -> generate mn data            |
-| nca_c()                                           | permissible compressive axial force strength     |
-| nu_t()                                            | permissible tension axial force strength         |
-| mnuaci(direction,nd)                              |                                                  |
-| mnuaci_twoM(direction,nd)                         |                                                  |
-| mn_result_xlsx(div,path,sheet_name,wb)            |                                                  |
-| make_model_fig(name)                              |                                                  |
-| make_fig(input_file,name)                         |                                                  |
-| aft_mn(direction,div,path)                        |                                                  |
-| mnuGen(direction,div)                             |                                                  |
-| sig2(ee,sigy,e)                                   | e/strain -> stress of the steel bar              |
-| nuaci(xn,fc,eu,k1,k2,k3,ee,sigy,b,dd,pos,area)    |                                                  |
-| muaci(xn,fc,eu,k1,k2,k3,ee,sigy,b,dd,pos,area,nn) |                                                  |
+| method                                                   | Description                                      |
+|:---------------------------------------------------------|--------------------------------------------------|
+| init(fc,fy,b,dd,nx,ny,dtx,dty,dia,lfc,sfc,lfy,sfy,alpha) | initialize of variable                           |
+| feature()                                                | get sIx, sIy, sZx, sZy, Ag                       |
+| bar_pos(nx,ny,dtx,dty)                                   | set steel bar position                           |
+| narc(b,dd,xn,fc,ft,pos,area)                             | xn/neutral axis -> Na/Permissible axial force    |
+| marc(b,dd,xn,fc,ft,pos,area,nn)                          | xn/neutral axis -> Ma/Permissible bending moment |
+| mnarc(b,dd,fc,ft,pos,aw,nn)                              | nn/axial force -> Ma/Permissible bending moment  |
+| ma(direction,fc,ft,nn)                                   | nn/axial force & direction(X or Y) -> Ma         |
+| mnaGen(direction,fc,ft,div)                              | direction(X or Y) -> generate mn data            |
+| nca_c()                                                  | permissible compressive axial force strength     |
+| nu_t()                                                   | permissible tension axial force strength         |
+| mnuaci(direction,nd)                                     |                                                  |
+| mnuaci_twoM(direction,nd)                                |                                                  |
+| mn_result_xlsx(div,path,sheet_name,wb)                   |                                                  |
+| make_model_fig(name)                                     |                                                  |
+| make_fig(input_file,name)                                |                                                  |
+| aft_mn(direction,div,path)                               |                                                  |
+| mnuGen(direction,div)                                    |                                                  |
+| sig2(ee,sigy,e)                                          | e/strain -> stress of the steel bar              |
+| nuaci(xn,fc,eu,k1,k2,k3,ee,sigy,b,dd,pos,area)           |                                                  |
+| muaci(xn,fc,eu,k1,k2,k3,ee,sigy,b,dd,pos,area,nn)        |                                                  |
 
 ### init()
-| Parameters | Description                                   | unit  |       |
-|:-----------|-----------------------------------------------|-------|-------|
-| fc         | compressive concrete strength                 | N/mm2 | float |
-| fy         | yield steel bar strength                      | N/mm2 | float |
-| b          | width of the column                           | mm    | float |
-| dd         | depth of the column                           | mm    | float |
-| nx,ny      | number of steel bar                           | Nos   | int   |
-| dtx,dty    | position of the steel bar from column surface | mm    | float |
+| Parameters | Description                                           | unit  |       |
+|:-----------|-------------------------------------------------------|-------|-------|
+| fc         | compressive concrete strength                         | N/mm2 | float |
+| fy         | yield steel bar strength                              | N/mm2 | float |
+| b          | width of the column                                   | mm    | float |
+| dd         | depth of the column                                   | mm    | float |
+| nx,ny      | number of steel bar                                   | Nos   | int   |
+| dtx,dty    | position of the steel bar from column surface         | mm    | float |
+| lfc,sfc    | long & short term permissble concrete strength        | N/mm2 | float |
+| lfy,sfy    | long & short term permissble tensile strength         | N/mm2 | float |
+| alpha      | multipler of the yield strength for ultimate capacity | -     | float |
+
 
 ## 2.3 col.Aft_mn()
 

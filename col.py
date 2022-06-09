@@ -15,13 +15,22 @@ import rc
 # 柱、MN計算
 class col():
 
-    def __init__(self,fc,fy,b,dd,nx,ny,dtx,dty,dia):
+    def __init__(self,fc,fy,b,dd,nx,ny,dtx,dty,dia,\
+                 lfc,sfc,lfy,sfy,alpha):
+        # 2022.05.31 addtional for permissible capacity
+        # lfc,sf,lfy,sfy/ long & short term permissible stress
+        # alpha: multiple factor to the fy
+        self.lfc = lfc
+        self.sfc = sfc
+        self.lfy = lfy
+        self.sfy = sfy
+        self.alpha = alpha
 
         # set parameter
         self.eps = 10 ** (-2)
 
         self.fc  = fc
-        self.fy  = fy
+        self.fy  = fy * self.alpha
         self.b   = b
         self.dd  = dd
 
@@ -524,8 +533,8 @@ class col():
         nx, mx = self.mnuGen("X",div)
         ny, my = self.mnuGen("Y",div)
         # Permissible Stress
-        nxa, mxa = self.mnaGen("X",self.fc*2.0/3.0,self.fy,div)
-        nya, mya = self.mnaGen("Y",self.fc*2.0/3.0,self.fy,div)
+        nxa, mxa = self.mnaGen("X",self.sfc,self.sfy,div)
+        nya, mya = self.mnaGen("Y",self.sfc,self.sfy,div)
         # fc,fyの設定が外部からアクセスできない
 
         #wb = openpyxl.Workbook(path)
