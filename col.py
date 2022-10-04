@@ -998,12 +998,14 @@ class Aft_mn():
 
     ########################################################################
     # init
-    def __init__(self,input_file,name,direction,mdmax,ndmin,ndmax):
+    def __init__(self,input_file,index,name,direction,mdmax,ndmin,ndmax):
 
 
         # make data frame
         self.df_mn = pd.read_excel(input_file, sheet_name=name,\
                                    engine='openpyxl' )
+
+        self.index = index
         self.name = name
 
         # make limit design
@@ -1126,7 +1128,8 @@ class Aft_mn():
             #ax2.get_legend().remove()
 
         #plt.show()
-        fig.savefig("./db/"+self.name+"_mn.png",dpi=300,transparent=True)
+        #fig.savefig("./db/"+self.name+"_mn.png",dpi=300,transparent=True)
+        fig.savefig("./db/"+self.index+"_mn.png",dpi=300,transparent=True)
         #plt.clf()
         plt.close(fig)
 
