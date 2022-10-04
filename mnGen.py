@@ -314,13 +314,25 @@ class MnGen():
         print("--------------------")
         #print(calc_sym)
 
-        name_cal = []
+
+        name_cal = [] # symbol name control
+        name_ind = [] # index name control
+
+
+        location = df_cal['loc']
+        print('****** This is the test******')
+        print(location)
+
+
         for i in range(0,len(calc_sym)):
             if calc_st[i] != "*":
                 name_cal.append( str(calc_st[i])+str(calc_sym[i]) )
+                name_ind.append( str(calc_ind[i])+name_cal[i] )
             else:
                 name_cal.append( "*" )
-        #print( name_cal )
+                name_ind.append( "*" )
+        #print( name_cal ,"!!!!!!")
+        #print(name_ind)
 
         """
         for i in range(0,len(name_cal)):
@@ -335,9 +347,10 @@ class MnGen():
         # test
         coldata = []
         for i in range(0,len(name_cal)):
-            print("mn drawing generate ---- No.",i,name_cal[i])
+            #print("mn drawing generate ---- No.",i,name_cal[i])
+            print("mn drawing generate ---- No.",i,name_ind[i],name_cal[i]) # modified index
             if name_cal[i] != "*":
-                obj = col.Aft_mn(self.out_path,name_cal[i],"XY",\
+                obj = col.Aft_mn(self.out_path,name_ind[i],name_cal[i],"XY",\
                            self.mdmax,self.ndmin,self.ndmax)
 
                 # get stress by excel
@@ -383,7 +396,7 @@ class MnGen():
         pathname = self.report_path
         title = self.report_title
 
-        rep = report.Report(cntl,name_cal,coldata,calc_st)
+        rep = report.Report(cntl,name_ind,name_cal,coldata,calc_st)
         rep.create_pdf(num,pathname,title)
 
 ########################################################################
@@ -391,10 +404,11 @@ class MnGen():
 
 if __name__ == '__main__':
     #input_path = "./input_mngen/data.xlsx"
-    input_path = "./input_mngen/data_new.xlsx"
+    #input_path = "./input_mngen/data_new.xlsx"
     #input_path = "./input_mngen/before.xlsx"
     #input_path = "./input_mngen/after.xlsx"
     #input_path = "./test/data.xlsx"
+    input_path = "./input_mngen/ve.xlsx"
     obj = MnGen(input_path)
     obj.read_cntl()
     # they are sets
