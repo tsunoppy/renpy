@@ -25,7 +25,7 @@ class MnGen():
         print("Start Main")
         print("--------------------")
 
-        """
+
         if os.path.exists('./db'):
             shutil.rmtree('./db')
             os.mkdir('./db')
@@ -33,7 +33,7 @@ class MnGen():
         else:
             os.mkdir('./db')
             print('none *db')
-        """
+
 
         ####################
         # path info.
@@ -320,8 +320,11 @@ class MnGen():
 
 
         location = df_cal['loc']
+
+        """
         print('****** This is the test******')
         print(location)
+        """
 
 
         for i in range(0,len(calc_sym)):
@@ -396,7 +399,7 @@ class MnGen():
         pathname = self.report_path
         title = self.report_title
 
-        rep = report.Report(cntl,name_ind,name_cal,coldata,calc_st)
+        rep = report.Report(cntl,name_ind,name_cal,coldata,calc_st,location)
         rep.create_pdf(num,pathname,title)
 
 ########################################################################

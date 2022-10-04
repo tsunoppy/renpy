@@ -27,7 +27,7 @@ class Report():
 
     ########################################################################
     # init data
-    def __init__(self,cntlfile,draw_path,coldata,st):
+    def __init__(self,cntlfile,draw_path,draw_path2,coldata,st,location):
 
         self.cntlFile = cntlfile
         self.pathname = os.path.dirname(self.cntlFile)
@@ -37,7 +37,11 @@ class Report():
         # フォント登録
         pdfmetrics.registerFont(TTFont('GenShinGothic', GEN_SHIN_GOTHIC_MEDIUM_TTF))
 
-        self.draw_path = draw_path
+        self.draw_path = draw_path   # mn_data
+        self.draw_path2 = draw_path2 # model_data
+
+        self.location = location
+
         self.coldata = coldata
         self.st = st
         #font_size = 20
@@ -73,11 +77,13 @@ class Report():
         dia= "{:.0f}".format(self.coldata[index+index2][4])
         total = "{:.0f}".format(self.coldata[index+index2][5])
 
-        title = str(self.draw_path[index+index2])
+        title = str(self.draw_path2[index+index2])
         size = str(b) + "x" + str(d)
         comment = str(total) + "-D" + str(dia)
         material = "Fc" + str(fc) + ", fy=" + str(fy)
 
+        #loc = str(self.draw_path[index+index2])
+        loc = str(self.location[index+index2])
 
         # Model
         c.setFont(self.FONT_NAME, 12)
@@ -88,6 +94,12 @@ class Report():
                      title\
                      )
         c.setFont(self.FONT_NAME, 10)
+
+
+        # added 22/08/07
+        c.drawString(220, self.ypos(0,y_shift),
+                     loc\
+                     )
 
         #
         c.drawString(70, self.ypos(9,y_shift),
@@ -125,7 +137,7 @@ class Report():
         c.drawImage(imagefile,\
                     210,  y_shift + 310, width=12*cm, preserveAspectRatio=True, mask='auto')
 
-        imagefile = "./db/" + self.draw_path[index2+index] + "_model.png"
+        imagefile = "./db/" + self.draw_path2[index2+index] + "_model.png"
         c.drawImage(imagefile,\
                     87,  y_shift + 450, width=3*cm, preserveAspectRatio=True, mask='auto')
 
@@ -194,7 +206,7 @@ class Report():
             df2 = "."
 
             print("insert row to pdf report, row:", i+index )
-            if self.draw_path[i+index] != "*":
+            if self.draw_path2[i+index] != "*":
                 #print(self.draw_path[i+index])
                 #print(self.coldata[i+index][0])
                 self.create_row( c, i, data, df2, index )
